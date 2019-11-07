@@ -1,32 +1,45 @@
 import numpy as np
 
-TRAINING_ITERATIONS = 20000
+TRAINING_ITERATIONS = 100000
 SEED = 1
+np.set_printoptions(formatter={'all':lambda x: str(x)})
 
-def sigmoid(x):
-    return 1 / (1 + np.exp(-x))
+class NN:
 
-def sigmoid_derivative(x):
-    return sigmoid(x) * (1 - sigmoid(x))
+    def __init__(self, seed=SEED):
+        np.random.seed(seed)
+        self.synaptic_weights = 2 * np.random.random((3, 1)) - 1
 
-training_inputs = np.array([[0,0,1],
-                            [1,1,1],
-                            [1,0,1],
-                            [0,1,1]])
+    def __sigmoid(self, x):
+        return 1 / (1 + np.exp(-x))
 
-training_outputs = np.array([[0,1,1,0]]).T
+    def __sigmoid_derivative(self, x):
+        return self. __sigmoid(x) * (1 - self. __sigmoid(x))
 
-np.random.seed(SEED)
-synaptic_weights = 2 * np.random.random((3, 1)) - 1
+    def train(self, t_inputs, t_outputs, iters=TRAINING_ITERATIONS):
+        for iterations in range(iters):
+            output = self.think(t_inputs)
+            error = t_outputs - output
+            self.synaptic_weights += np.dot(t_inputs.T, error * self.__sigmoid_derivative(output))
 
-print("Random weights:\n", synaptic_weights)
+    def think(self, inputs):
+        return self.__sigmoid(np.dot(inputs, self.synaptic_weights))
 
-for iterations in range(TRAINING_ITERATIONS):
-    input_layer = training_inputs
-    outputs = sigmoid(np.dot(input_layer, synaptic_weights))
-    error = training_outputs - outputs
-    weight_deltas = error * sigmoid_derivative(outputs)
-    synaptic_weights += np.dot(input_layer.T, weight_deltas)
 
-print("Weights after:\n", synaptic_weights)
-print("Outputs:\n", outputs)
+if __name__ == "__main__":
+
+    neural_network = NN()
+    print("Random starting weights:\n", neural_network.synaptic_weights)
+
+    training_inputs = np.array([[0, 0, 1],
+                                [1, 1, 1],
+                                [1, 0, 1],
+                                [0, 1, 1],
+                                [0, 1, 0],
+                                [0, 0, 0]])
+
+    training_outputs = np.array([[0, 1, 1, 0, 0, 0]]).T
+
+    neural_network.train(training_inputs, training_outputs, TRAINING_ITERATIONS)
+    print("Post-training weights:\n", neural_network.synaptic_weights)
+    print("Considering new situation [1, 0, 0]:\n", neural_network.think(np.array([1, 0, 0])))
