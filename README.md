@@ -1,2 +1,2 @@
 # Neural-Network
-Python linear regression based artificial neural network
+Different types of neural networks wiht explainations as to their functionality
