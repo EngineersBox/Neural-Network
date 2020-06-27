@@ -1,6 +1,5 @@
 import numpy as np
-
-SEED = 1
+SEED = 4
 
 np.set_printoptions(formatter={'all': lambda x: str(x)})
 
@@ -15,7 +14,7 @@ class NN:
         return 1 / (1 + np.exp(-x))
 
     def __sigmoid_derivative(self, x):
-        return self. __sigmoid(x) * (1 - self. __sigmoid(x))
+        return self.__sigmoid(x) * (1 - self. __sigmoid(x))
 
     def train(self, t_inputs, t_outputs, iters):
         for iterations in range(iters):
